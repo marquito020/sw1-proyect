@@ -1,0 +1,19 @@
+PORT=3000
+
+JWT_SECRET=password
+
+STRIPE_SECRET_KEY=sk_test_51J3JQvK5
+
+OPENAI_API_KEY=
+
+LEONARDO_API_KEY=
+
+# MODEL_ID_LEONARDO=
+MODEL_ID_LEONARDO=
+
+BUCKET=aws-sw1
+
+AWS_ACCESS_KEY_ID =
+aws_secret_access_key = 
+
+DATABASE_URL="postgresql://postgres:postgres@localhost:5432/softwarebd?schema=public"

@@ -1,0 +1,12 @@
+migraciones
+RegistrarUsuarios
+template
+landing
+gestionar perfil
+amazonPilly
+exportarWord
+exportarPdf
+planesPago
+pasarelaPago
+suscribirsePlanPago
+actualizarSuscripcion 
