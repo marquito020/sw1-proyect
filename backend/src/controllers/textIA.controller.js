@@ -9,6 +9,7 @@ const generarTexto = async (req, res) => {
         console.log(idioma);
         console.log(nombreIdioma);
         const newTexto = await TextoIA.generarTexto({ personaje, nombrePersonaje, tema, reflexion, narrador,idioma,nombreIdioma,idUser });
+        console.log("Texto generado: ", newTexto);
         if (!newTexto)
             return res.status(400).json({ message: "El texto no se pudo generar" });
 

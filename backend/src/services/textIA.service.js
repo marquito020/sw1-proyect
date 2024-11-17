@@ -6,12 +6,21 @@ import api from "api";
 
 const chatGPTAPI = new ChatGPTAPI({
   apiKey: process.env.OPENAI_API_KEY || "",
+  completionParams: {
+    model: "gpt-4",
+  },
 });
 const sdk = api("@leonardoai/v1.0#28807z41owlgnis8jg");
 sdk.auth(process.env.LEONARDO_API_KEY || "");
 
-const ejemploPrompt = `Master professional photography, beautiful woman in bohemian dress and accessories, extreme textures and details, full body portrait shot, bohemian city landmarks background, 64K`;
-
+const ejemploPrompt = `
+    Master professional photography, 
+    beautiful woman in a bohemian dress and accessories, 
+    extreme textures and details, 
+    full-body portrait shot, 
+    bohemian city landmarks background, 
+    64K resolution, cinematic lighting, soft shadows, HDR.
+`;
 const prisma = new PrismaClient();
 const generarTexto = async ({
   personaje,
@@ -53,35 +62,33 @@ const generarTexto = async ({
   const texto = textArray.join("\n");
   console.log(texto);
 
-  const textPromt = await chatGPTAPI.sendMessage(
-    "Describeme al personaje principal en una situacion como si estuvieras describiendo una imagen en un solo parrafo no mas de 500 caracteres: " +
-      "\n" +
-      /*       titulo +
-      " " + */
+  const textPrompt = await chatGPTAPI.sendMessage(
+    "Describeme al personaje principal en una situación específica como si estuvieras describiendo una imagen. Sé detallado, usa menos de 400 caracteres y escribe en inglés: " +
       texto +
-      "\n"
+      "\nEjemplo: " +
+      ejemploPrompt
   );
   let count = 0;
   let result = "";
 
-  for (let i = 0; i < textPromt.text.length; i++) {
-    if (textPromt.text[i] !== " ") {
+  for (let i = 0; i < textPrompt.text.length; i++) {
+    if (textPrompt.text[i] !== " ") {
       count++;
     }
 
-    result += textPromt.text[i];
+    result += textPrompt.text[i];
 
     if (count === 550) {
       break;
     }
   }
-  textPromt.text = result;
-  console.log("Promp: " + textPromt.text);
+  textPrompt.text = result;
+  console.log("Promp: " + textPrompt.text);
 
   const audio = await generarAudio(text.text, narrador, idioma, "neural");
   console.log(audio.SynthesisTask.OutputUri);
 
-  const imagen = await generarImagen(textPromt.text);
+  const imagen = await generarImagen(textPrompt.text);
 
   console.log(imagen);
 
@@ -126,18 +133,17 @@ const generarAudio = async (texto, voiceId, languageCode, engine) => {
 const generarImagen = async (texto) => {
   const response = await sdk.createGeneration({
     prompt: texto,
-    modelId: process.env.MODEL_ID_LEONARDO || "",
-    width: 832,
-    height: 832,
-    sd_version: "v1_5",
+    modelId: process.env.MODEL_ID_LEONARDO || "default-model-id", // Ajusta el modelo
+    width: 1024, // Mejora resolución
+    height: 1024,
     num_images: 1,
     presetStyle: "LEONARDO",
     scheduler: "DPM_SOLVER",
     public: true,
+    promptMagic: true, // Activa mejoras automáticas del prompt
+    tiling: false,
     negative_prompt:
-      "two heads, two face, out of frame, extra fingers, mutated hands, poorly drawn hands, poorly drawn face, mutation, deformed, ugly, blurry, bad anatomy, bad proportions, extra limbs, cloned face, disfigured, out of frame, ugly, extra limbs, bad anatomy, gross proportions, malformed limbs, missing arms, missing legs, extra arms, extra legs, mutated hands, fused fingers, too many fingers, long neck, poorly drawn eyes, double heads, double faces, two heads, two faces, body out of frame, watermark, grainy, clipped, bad proportion, cropped image, blur haze, (watermark) nudity, nipples, deformed face, several hands, too much fingers, deformed face, deformed, malformed, weird, undefined face, weird face, strange face, deformed eyes, deformed iris different iris color, two heads, two faces, teeth, three arms, three hands, closeup, half head, two characters, text, missing hands, missing limbs, words, letters, letter, Clear Face",
-    promptMagic: true,
-    tiling: true,
+      "mutated hands, extra fingers, deformed face, poorly drawn face, watermark, text, cropped, blurry, low quality, extra limbs, missing limbs, fused fingers",
   });
   return response.data;
 };

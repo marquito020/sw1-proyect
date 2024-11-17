@@ -14,6 +14,6 @@ MODEL_ID_LEONARDO=
 BUCKET=aws-sw1
 
 AWS_ACCESS_KEY_ID =
-aws_secret_access_key = 
+AWS_SECRET_ACCESS_KEY = 
 
 DATABASE_URL="postgresql://postgres:postgres@localhost:5432/softwarebd?schema=public"

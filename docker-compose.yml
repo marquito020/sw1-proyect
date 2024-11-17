@@ -1,0 +1,55 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "4000:4000" # Puerto para el backend
+    environment:
+      DATABASE_URL: postgres://postgres:admin@db:5432/backenddb
+    env_file: # Incluye el archivo .env para cargar todas las variables
+      - ./backend/.env
+    depends_on:
+      db:
+        condition: service_healthy # Espera hasta que PostgreSQL esté saludable
+    networks:
+      - app-network
+    restart: always # Reinicia automáticamente si se detiene
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "5173:5173" # Puerto para el frontend
+    networks:
+      - app-network
+    restart: always # Reinicia automáticamente si se detiene
+
+  db:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: backenddb
+    ports:
+      - "5433:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - app-network
+    restart: always # Reinicia automáticamente si se detiene
+
+volumes:
+  pgdata:
+
+networks:
+  app-network:
+    driver: bridge
