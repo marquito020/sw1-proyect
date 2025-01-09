@@ -1,3 +1,4 @@
+
 export const PublicRoutes = {
   LANDING: "/landing",
   REGISTER: "/register",
@@ -7,6 +8,7 @@ export const PublicRoutes = {
 export const PrivateRoutes = {
   PRIVATE: "/private",
   DASHBOARD: "/dashboard",
+  DETALLECUENTO: "/dashboard/detalle/:id",
   USERS: "/users",
   CREARCUENTO: "/cuento/crear",
   EDITARCUENTO: "/cuento/editar/:id",

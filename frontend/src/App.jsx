@@ -21,6 +21,7 @@ function App() {
         <Provider store={store}>
           <BrowserRouter>
             <Routes>
+              <Route path="/*" element={<Private />} />
               <Route index path="/" element={<LandingPage />} />
               <Route path="/register" element={<Register />} />
               <Route path="/login" element={<Login />}/>

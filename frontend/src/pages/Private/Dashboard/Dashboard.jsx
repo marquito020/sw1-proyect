@@ -1,4 +1,8 @@
+import { useNavigate } from "react-router-dom";
+import { PrivateRoutes } from "../../../constants/routes";
 function Dashboard() {
+  const navigate = useNavigate();
+
   const cuentos = [
     {
       id: 1,
@@ -57,7 +61,12 @@ function Dashboard() {
               </h2>
               <p className="text-center text-gray-600 mt-2">{cuento.description}</p>
               <div className="mt-4 flex justify-center">
-                <button className="bg-indigo-500 text-white px-4 py-2 rounded-lg hover:bg-indigo-600 transition">
+                <button 
+                  onClick={() => {
+                    console.log(`Navegando a: ${PrivateRoutes.DETALLECUENTO.replace(":id", cuento.id)}`);
+                    navigate(`${PrivateRoutes.DETALLECUENTO.replace(":id", cuento.id)}`);
+                  }}
+                >
                   Ver Más
                 </button>
               </div>

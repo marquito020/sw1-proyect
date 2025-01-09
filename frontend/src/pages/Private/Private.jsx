@@ -12,6 +12,8 @@ import ListaCuento from "./Cuentos/ListaCuento";
 import VerCuento from "./Cuentos/VerCuento";
 import BuyPage from "../Buy/Buy";
 import BuyingPage from "../Buy/Buying";
+import Detallecuentos from "./Dashboard/Detallecuentos";
+
 
 function Private() {
   return (
@@ -26,6 +28,7 @@ function Private() {
             />
           }
         />
+        <Route path={PrivateRoutes.DETALLECUENTO} element={<Detallecuentos />} />
         <Route path={PrivateRoutes.DASHBOARD} element={<Dashboard />} />
         <Route path={PrivateRoutes.USERS} element={<Users />} />
         <Route path={PrivateRoutes.CREARCUENTO} element={<CrearCuento />} />
